@@ -1,0 +1,22 @@
+with "Ada_Drivers_Library/boards/rp2040_pico.gpr";
+with "Ada_Drivers_Library/boards/common_config.gpr";
+
+project try is
+
+   for Languages use ("Ada");
+
+   for Main use ("try.adb");
+
+   for Source_Dirs use ("src/**");
+
+   for Object_Dir use "obj/" & Common_Config.Build;
+
+   for Target use "arm-eabi";
+
+   for Runtime ("Ada") use rp2040_pico'Runtime("Ada");
+
+   package Builder is
+     for Global_Configuration_Pragmas use "gnat.adc";
+   end Builder;
+
+end try;

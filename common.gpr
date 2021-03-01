@@ -1,0 +1,37 @@
+with "../Ada_Drivers_Library/boards/common_config";
+
+project Common is
+
+   type LOADER_Type is
+      ("RAM", "ROM");
+
+   LOADER : LOADER_Type := external ("LOADER", "ROM");
+
+   type RTS_Type is ("ravenscar-ssfp", "ravenscar-sfp", "ravenscar-full");
+   RTS : RTS_Type := External ("RTS", "ravenscar-full");
+
+   for Languages use ("Ada");
+   for Target use "arm-eabi";
+
+   package Compiler renames Common_Config.Compiler;
+   package Builder renames Common_Config.Builder;
+
+   package Linker is
+      for Default_Switches ("Ada") use
+        ("-Wl,--defsym=__stack_size=4096",
+         "-Wl,--gc-sections",
+         "-Wl,--print-memory-usage",
+	 "-Wl,-Map=xyzzy"
+	 );
+   end Linker;
+
+   package Ide is
+      for Gnat use "arm-eabi-gnat";
+      for Gnatlist use "arm-eabi-gnatls";
+      for Debugger_Command use "arm-eabi-gdb";
+      for Program_Host use "localhost:4242";
+      for Communication_Protocol use "remote";
+      for Connection_Tool use "st-util";
+   end Ide;
+
+end Common;
